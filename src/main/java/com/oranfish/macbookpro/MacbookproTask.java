@@ -31,9 +31,13 @@ public class MacbookproTask {
     @Value("${task.url}")
     private String url;
     @Value("${task.year}")
-    private int year = 2016;
+    private int year;
+    @Value("${task.frequency}")
+    private double frequency;
     @Value("${task.price}")
-    private int price = 17000;
+    private int price;
+
+
 
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -70,21 +74,26 @@ public class MacbookproTask {
 
     public boolean validate(Element e){
         boolean yearValidate = false;
+        boolean frequencyValidate = false;
         boolean priceValidate = false;
         Element specs = e.select("tbody tr td[class=specs]").get(0);
         Element priceElement = e.select("tbody tr td[class=purchase-info] p[class=price] span[class=current_price]").get(0);
 
         String specsText = specs.text().replaceAll(" ", "");
         String yearStr = specsText.substring(specsText.indexOf("最初发布于")+5, specsText.indexOf("最初发布于")+9);
+        String frequencyStr = specsText.substring(18, 21);
         String priceStr = priceElement.text().replaceAll(" ", "").replaceAll(",", "").replaceAll("RMB", "");
 
         if(Integer.parseInt(yearStr) == year){
             yearValidate = true;
         }
+        if(Double.parseDouble(frequencyStr) == frequency){
+            frequencyValidate = true;
+        }
         if(Integer.parseInt(priceStr) < price){
             priceValidate = true;
         }
-        if(yearValidate && priceValidate){
+        if(yearValidate && frequencyValidate && priceValidate){
             return true;
         }else{
             return false;
