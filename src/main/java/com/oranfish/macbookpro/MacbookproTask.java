@@ -37,13 +37,15 @@ public class MacbookproTask {
     @Value("${task.price}")
     private int price;
 
+    private boolean finded = false;
+
 
 
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @PostConstruct
     public void run(){
-        while(true){
+        while(!finded){
             runTask();
             try {
                 Thread.sleep(60*10*1000);
@@ -119,6 +121,7 @@ public class MacbookproTask {
             e.printStackTrace();
         }
         mailSender.send(message);
-
+        System.out.println(sdf.format(new Date()) + ", finded!");
+        finded = true;
     }
 }
